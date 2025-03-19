@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules/
+
+# Build and output directories
+dist/
+dist-ssr/
+.next/
+
+# Local environment variables
+.env
+.env.*  # Ignore all environment files like .env.production, .env.development
+
+# Public folder (if containing generated files)
+.public
+.assets
+
+# Testing coverage
+coverage/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Database backups and migrations
+database/
+*.sql
+
+# Optional (if you don’t want to commit lock files)
+# package-lock.json
+# yarn.lock
