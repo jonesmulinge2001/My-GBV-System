@@ -1,9 +1,13 @@
 const express = require("express");
 const db = require("../config/db"); // Import database connection
+const authenticateToken = require("../middleware/authMiddleware"); // Import middleware
+
 const router = express.Router();
 
-// 1. Get all reported cases
-router.get("/cases", (req, res) => {
+// 🔒 Protect all routes with `authenticateToken`
+
+// 1️⃣ Get all reported cases (Admin Only)
+router.get("/cases", authenticateToken, (req, res) => {
   db.query("SELECT * FROM cases", (err, results) => {
     if (err) {
       return res.status(500).json({ error: "Database error" });
@@ -12,8 +16,8 @@ router.get("/cases", (req, res) => {
   });
 });
 
-// 2. Get a specific case by ID
-router.get("/cases/:id", (req, res) => {
+// 2️⃣ Get a specific case by ID (Admin Only)
+router.get("/cases/:id", authenticateToken, (req, res) => {
   const caseId = req.params.id;
 
   db.query("SELECT * FROM cases WHERE id = ?", [caseId], (err, result) => {
@@ -27,8 +31,8 @@ router.get("/cases/:id", (req, res) => {
   });
 });
 
-// 3. Update case status (Pending → Solved)
-router.put("/cases/:id", (req, res) => {
+// 3️⃣ Update case status (Pending → Solved) (Admin Only)
+router.put("/cases/:id", authenticateToken, (req, res) => {
   const caseId = req.params.id;
   const { status } = req.body; // Expected values: "Pending" or "Solved"
 
@@ -47,8 +51,8 @@ router.put("/cases/:id", (req, res) => {
   });
 });
 
-// 4. Delete a reported case by ID
-router.delete("/cases/:id", (req, res) => {
+// 4️⃣ Delete a reported case by ID (Admin Only)
+router.delete("/cases/:id", authenticateToken, (req, res) => {
   const caseId = req.params.id;
 
   db.query("DELETE FROM cases WHERE id = ?", [caseId], (err, result) => {

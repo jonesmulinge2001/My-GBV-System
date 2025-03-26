@@ -8,6 +8,7 @@ const adminRoutes = require("./src/routes/adminRoutes"); // Admin manages report
 const resourceRoutes = require("./src/routes/resourceRoutes"); // Routes for managing resources
 const analyticsRoutes = require("./src/routes/analytics"); // Case Reporting Analytics
 const contactRoutes = require("./src/routes/contactRoutes"); // Contact component routes
+const userProfileRoutes = require("./src/routes/userProfileRoutes"); // User Profile Routes
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/admin", adminRoutes); // Admin manages reported cases
 app.use("/resources", resourceRoutes); // Admin manages resources (add, view, delete)
 app.use("/analytics", analyticsRoutes); // Analytics for case reporting
 app.use("/contact", contactRoutes); // Users send messages, admins view/respond
+app.use("/user-profile", userProfileRoutes); // User profile fetches user details & notifications
 
 // Start server
 const PORT = 5000;

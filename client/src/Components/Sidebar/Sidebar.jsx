@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Home, FilePlus, BookOpen, Phone, Info, Menu, X } from "lucide-react";
+import { Home, FilePlus, BookOpen, Phone, Info, Menu, X, UserCircle } from "lucide-react";
 
 const menuItems = [
   { name: "Home", path: "/", icon: <Home size={20} /> },
@@ -8,6 +8,7 @@ const menuItems = [
   { name: "Helpful Resources", path: "/resources", icon: <BookOpen size={20} /> },
   { name: "Contact", path: "/contact", icon: <Phone size={20} /> },
   { name: "About", path: "/about", icon: <Info size={20} /> },
+  {name: "UserProfile",path: "/profile",icon:<UserCircle size={20}/>}
 ];
 
 const Sidebar = () => {

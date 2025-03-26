@@ -49,7 +49,6 @@ const AdminDashboard = () => {
           transition={{ duration: 0.5 }}
           className="text-4xl font-bold text-gray-800"
         >
-          Welcome, GBV Admin
         </motion.h1>
         {/* <p className="text-gray-600 mt-2">
           Manage reports, add or remove resources, and oversee platform activities.

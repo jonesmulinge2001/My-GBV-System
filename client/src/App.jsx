@@ -18,6 +18,7 @@ import Footer from "./Components/Footer/Footer";
 import AllResources from "./Components/Admin/AllResources";
 import Analytics from "./Components/Admin/Analytics";
 import ContactReply from "./Components/Admin/ContactReply";
+import UserProfile from "./Components/UserProfile/UserProfile";
 
 const AppContent = () => {
   const location = useLocation();
@@ -26,7 +27,7 @@ const AppContent = () => {
   const hideSidebarAndFooter = 
     location.pathname === "/login" || 
     location.pathname === "/signup" || 
-    location.pathname.startsWith("/admin"); 
+    location.pathname.startsWith("/admin");
 
   // State for managing helpful resources
   const [resources, setResources] = useState([
@@ -54,6 +55,7 @@ const AppContent = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/report" element={<ReportCase />} />
           <Route path="/resources" element={<HelpfulResources resources={resources} />} />
+          <Route path="/profile" element={<UserProfile/>}/>
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
 

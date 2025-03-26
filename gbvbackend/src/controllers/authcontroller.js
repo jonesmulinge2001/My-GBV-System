@@ -1,9 +1,13 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const db = require("../config/db");
+require("dotenv").config(); 
 
-// Signup function
+const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
+
+// 📌 Signup Function
 const signupUser = async (req, res) => {
-    const {email, password } = req.body;
+    const { email, password } = req.body;
 
     if (!email || !password) {
         return res.status(400).json({ message: "All fields are required" });
@@ -11,19 +15,30 @@ const signupUser = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const sql = "INSERT INTO users (email, password) VALUES (?, ?)";
-        db.query(sql, [email, hashedPassword], (err, result) => {
-            if (err) {
-                return res.status(500).json({ message: "Database error" });
+
+        const checkEmailSQL = "SELECT * FROM users WHERE email = ?";
+        db.query(checkEmailSQL, [email], (err, results) => {
+            if (err) return res.status(500).json({ message: "Database error" });
+
+            if (results.length > 0) {
+                return res.status(400).json({ message: "Email already in use" });
             }
-            res.status(201).json({ message: "Signup successful" });
+
+            const sql = "INSERT INTO users (email, password) VALUES (?, ?)";
+            db.query(sql, [email, hashedPassword], (err, result) => {
+                if (err) return res.status(500).json({ message: "Database error" });
+
+                const token = jwt.sign({ id: result.insertId, email }, JWT_SECRET, { expiresIn: "7d" });
+
+                return res.status(201).json({ message: "Signup successful", token });
+            });
         });
     } catch (error) {
-        res.status(500).json({ message: "Error hashing password" });
+        return res.status(500).json({ message: "Error hashing password" });
     }
 };
 
-// Login function
+// 📌 Login Function (Includes Case ID)
 const loginUser = (req, res) => {
     const { email, password } = req.body;
 
@@ -33,9 +48,7 @@ const loginUser = (req, res) => {
 
     const sql = "SELECT * FROM users WHERE email = ?";
     db.query(sql, [email], async (err, results) => {
-        if (err) {
-            return res.status(500).json({ message: "Database error" });
-        }
+        if (err) return res.status(500).json({ message: "Database error" });
 
         if (results.length === 0) {
             return res.status(401).json({ message: "Invalid email or password" });
@@ -48,7 +61,25 @@ const loginUser = (req, res) => {
             return res.status(401).json({ message: "Invalid email or password" });
         }
 
-        res.status(200).json({ message: "Login successful" });
+        // Fetch case ID linked to the user
+        const caseSql = "SELECT id FROM cases WHERE user_id = ?";
+        db.query(caseSql, [user.id], (caseErr, caseResults) => {
+            if (caseErr) return res.status(500).json({ message: "Database error" });
+
+            const caseId = caseResults.length > 0 ? caseResults[0].id : null;
+
+            const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "7d" });
+
+            return res.status(200).json({
+                message: "Login successful",
+                token,
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    caseId: caseId,
+                },
+            });
+        });
     });
 };
 

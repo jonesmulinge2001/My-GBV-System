@@ -45,8 +45,6 @@ const ReportCase = () => {
         support_needed: formData.supportNeeded,
       };
 
-      console.log("Submitting Data:", requestData);
-
       try {
         const response = await fetch("http://localhost:5000/cases", {
           method: "POST",
@@ -55,10 +53,11 @@ const ReportCase = () => {
         });
 
         const data = await response.json();
-        console.log("Response Data:", data);
 
         if (response.ok) {
           setSuccessMessage("Case reported successfully!");
+          localStorage.setItem("caseId", data.id); // Store caseId in localStorage
+
           setFormData({
             firstName: "",
             gender: "",
