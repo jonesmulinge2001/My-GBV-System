@@ -10,11 +10,11 @@ const HelpfulResources = () => {
   useEffect(() => {
     const fetchResources = async () => {
       try {
-        const response = await fetch("http://localhost:5000/resources/all");
-        if (!response.ok) {
+        const myResponse = await fetch("http://localhost:5000/resources/all");
+        if (!myResponse.ok) {
           throw new Error("Failed to fetch resources");
         }
-        const data = await response.json(); // parses respomse body as JSON and returns a promise
+        const data = await myResponse.json(); // parses myresponse body as JSON and returns a promise
         setDynamicResources(data);
       } catch (error) {
         setError(error.message);
@@ -27,21 +27,21 @@ const HelpfulResources = () => {
   }, []); // empty dependency
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 p-6">
+    <div className="min-h-screen -mt-10 bg-gradient-to-b from-blue-50 to-gray-100 p-6">
       <motion.h1
-        className="text-4xl font-bold text-gray-800 text-center mb-8"
+        className="text-sm font-bold text-gray-800 text-center mb-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        Helpful Resources
+        Resources to help you understand more about gender based violence
       </motion.h1>
 
       {loading && <div className="text-center text-gray-600">Loading resources...</div>}
       {error && <div className="text-center text-red-500 font-semibold">{error}</div>}
 
       {!loading && !error && (
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
           {dynamicResources.map((resource, index) => (
             <motion.div
               key={index}
@@ -64,7 +64,7 @@ const HelpfulResources = () => {
                 to={resource.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block text-white bg-blue-500 px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition"
+                className="inline-block text-white text-xs bg-blue-500 px-3 py-1 rounded-lg font-medium hover:bg-blue-600 transition"
               >
                 View Resource
               </Link>

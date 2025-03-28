@@ -7,18 +7,37 @@ const UserProfile = () => {
     const caseId = localStorage.getItem("caseId");
 
     useEffect(() => {
-        if (!caseId) return;
-
-        fetch(`http://localhost:5000/user-profile/${caseId}`)
-            .then((res) => res.json())
-            .then((data) => setProfile(data))
-            .catch((err) => console.error("Error fetching profile:", err));
-
-        fetch(`http://localhost:5000/user-profile/${caseId}/notifications`)
-            .then((res) => res.json())
-            .then((data) => setNotification(data.message))
-            .catch((err) => console.error("Error fetching notification:", err));
-    }, [caseId]);
+    if (!caseId) {
+      return;
+    }
+  
+    // Function to fetch user profile
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/user-profile/${caseId}`);
+        const profileData = await response.json();
+        setProfile(profileData);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+  
+    // Function to fetch notifications
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/user-profile/${caseId}/notifications`);
+        const notificationData = await response.json();
+        setNotification(notificationData.message);
+      } catch (error) {
+        console.error("Error fetching notification:", error);
+      }
+    };
+  
+    // Calling the two fns
+    fetchUserProfile();
+    fetchNotifications();
+  
+  }, [caseId]); //dependency
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">

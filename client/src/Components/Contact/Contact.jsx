@@ -64,11 +64,11 @@ const Contact = () => {
 
         <form className="space-y-6 mt-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Full Name</label>
+            <label className="block text-gray-700 font-medium mb-1">Your Full Name</label>
             <input
               type="text"
               name="fullName"
-              placeholder="John Doe"
+              placeholder="Name..."
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               onChange={handleChange}
               value={formData.fullName}
@@ -81,7 +81,7 @@ const Contact = () => {
             <input
               type="email"
               name="email"
-              placeholder="johndoe@example.com"
+              placeholder="abc123@gmail.com"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               onChange={handleChange}
               value={formData.email}
@@ -93,7 +93,7 @@ const Contact = () => {
             <label className="block text-gray-700 font-medium mb-1">Message</label>
             <textarea
               name="message"
-              placeholder="Type your message here..."
+              placeholder="Leave a message here..."
               rows="4"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               onChange={handleChange}

@@ -20,24 +20,24 @@ const HomeView = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
-      <div className="absolute top-4 right-4 flex space-x-4">
+    <div className="min-h-screen bg-gray-100 flex flex-col -mt-10 items-center justify-center">
+      <div className="absolute top-1 right-1 flex space-x-2">
         <button 
           onClick={() => navigate('/login')}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer"
+          className="px-4 py-2 text-xs bg-blue-500 text-white rounded-full hover:bg-blue-600 cursor-pointer"
         >Login</button>
         <button 
           onClick={() => navigate('/signup')}
-          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 cursor-pointer"
+          className="px-4 py-2 text-xs bg-green-500 text-white rounded-full hover:bg-green-600 cursor-pointer"
         >Signup</button>
       </div>
       <motion.div 
         initial={{ opacity: 0, y: -50 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.8 }}
-        className="text-center mb-8"
+        className="text-center -pt-4 "
       >
-        <h1 className="text-4xl font-bold text-gray-800">Welcome to the GBV Reporting System</h1>
+        <h1 className="text-4xl font-bold text-lg text-gray-800">Welcome to the GBV Reporting System</h1>
         <p className="text-gray-600 mt-2 text-lg">Your voice matters. Report gender-based violence safely and anonymously.</p>
       </motion.div>
       
@@ -47,11 +47,11 @@ const HomeView = () => {
         transition={{ duration: 0.8, delay: 0.3 }}
         className="flex space-x-4"
       >
-        <Link to="/report" className="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 transition">
+        <Link to="/report" className="bg-red-500 text-white text-sm px-6 py-3 rounded-full shadow-lg hover:bg-red-600 transition">
           Report a Case
         </Link>
-        <Link to="/resources" className="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-600 transition">
-          Get Help & Resources
+        <Link to="/resources" className="bg-blue-500 text-white text-sm px-6 py-3 rounded-full shadow-lg hover:bg-blue-600 transition">
+          Get Help & Enlightening Resources
         </Link>
       </motion.div>
       
@@ -61,10 +61,10 @@ const HomeView = () => {
         transition={{ duration: 0.8, delay: 0.6 }}
         className="mt-10 bg-white p-6 rounded-lg shadow-lg max-w-2xl"
       >
-        <h2 className="text-2xl font-semibold text-gray-700">Why Report?</h2>
-        <p className="text-gray-600 mt-2">Reporting GBV helps to create awareness, seek justice, and support survivors in need. Our platform ensures anonymity and provides direct access to essential resources.</p>
+        <h2 className="text-2xl font-semibold text-sm text-gray-700">Why Report?</h2>
+        <p className="text-gray-600 text-sm mt-2">Reporting GBV helps to create awareness, seek justice, and support survivors in need. Our platform ensures anonymity and provides direct access to essential resources.</p>
       </motion.div>
-      <h1 className="text-3xl font-bold text-gray-800 mt-12">Helpful Messages</h1>
+      <h1 className="text-sm font-bold text-gray-800 mt-12">Helpful Messages</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10">
         {images.map((item, index) => (
           <motion.div 
@@ -77,6 +77,7 @@ const HomeView = () => {
             <img src={item.src} alt="gbv activist" className="w-full h-60 object-cover rounded-lg" />
             <p className="mt-4 text-gray-700 text-sm">{item.text}</p>
           </motion.div>
+          
         ))}
       </div>
     </div>

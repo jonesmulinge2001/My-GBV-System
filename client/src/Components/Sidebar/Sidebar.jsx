@@ -26,7 +26,7 @@ const Sidebar = () => {
 
       {/* Sidebar Container */}
       <div
-        className={`fixed left-0 top-0 h-full bg-gray-900 text-white p-5 shadow-lg flex flex-col transform transition-transform duration-300 
+        className={`fixed left-0 top-0 h-full bg-blue-900 text-white p-5 shadow-lg flex flex-col transform transition-transform duration-300 
           ${isOpen ? "translate-x-0" : "-translate-x-full"} 
           md:translate-x-0 md:w-64`}
       >
