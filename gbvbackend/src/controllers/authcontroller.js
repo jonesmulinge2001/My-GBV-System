@@ -38,7 +38,7 @@ const signupUser = async (req, res) => {
     }
 };
 
-// 📌 Login Function (Includes Case ID & Status check)
+// 📌 Login Function (Cleaned Up)
 const loginUser = (req, res) => {
     const { email, password } = req.body;
 
@@ -49,7 +49,7 @@ const loginUser = (req, res) => {
     const sql = "SELECT * FROM users WHERE email = ?";
     db.query(sql, [email], async (err, results) => {
         if (err) {
-            console.error("Database error:", err);  
+            console.error("Database error:", err);
             return res.status(500).json({ message: "Database error", error: err });
         }
 
@@ -66,37 +66,27 @@ const loginUser = (req, res) => {
                 return res.status(401).json({ message: "Invalid email or password" });
             }
 
-            // Fetch case ID linked to the user (if any)
-            const caseSql = "SELECT id FROM cases WHERE user_id = ?"; // Assuming you use user_id for relation
-            db.query(caseSql, [user.id], (caseErr, caseResults) => {
-                if (caseErr) {
-                    console.error("Error fetching case ID:", caseErr); 
-                    return res.status(500).json({ message: "Database error", error: caseErr });
-                }
+            const userStatus = user.status || 'user';
 
-                const caseId = caseResults.length > 0 ? caseResults[0].id : null;
+            const token = jwt.sign(
+                { id: user.id, email: user.email, status: userStatus },
+                JWT_SECRET,
+                { expiresIn: "7d" }
+            );
 
-                // Include user status (admin or user)
-                const userStatus = user.status || 'user'; // Default to 'user' if no status is set
+            console.log("User logged in:", { id: user.id, email: user.email, status: userStatus });
 
-                const token = jwt.sign({ id: user.id, email: user.email, status: userStatus }, JWT_SECRET, { expiresIn: "7d" });
-
-                console.log("User logged in:", { id: user.id, email: user.email, caseId, status: userStatus });
-
-                return res.status(200).json({
-                    message: "Login successful",
-                    token,
-                    user: {
-                        id: user.id,
-                        email: user.email,
-                        caseId: caseId,
-                        status: userStatus, // Add the user status here
-                    },
-                });
+            return res.status(200).json({
+                message: "Login successful",
+                token,
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    status: userStatus,
+                },
             });
-
         } catch (error) {
-            console.error("Password validation error:", error); 
+            console.error("Password validation error:", error);
             return res.status(500).json({ message: "Internal server error", error: error.message });
         }
     });

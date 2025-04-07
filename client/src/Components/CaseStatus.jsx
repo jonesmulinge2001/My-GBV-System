@@ -17,7 +17,7 @@ const CaseStatus = () => {
     setCaseData(null);
 
     try {
-      const response = await fetch(`http://localhost:5000/case-status/${email}`, {
+      const response = await fetch(`http://localhost:5000/cases/case-status/${email}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

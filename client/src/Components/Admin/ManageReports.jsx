@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { CheckCircle, MessageCircle } from "lucide-react";
 
 const ManageReports = () => {
   const [cases, setCases] = useState([]);
@@ -7,7 +8,6 @@ const ManageReports = () => {
   const [adminResponse, setAdminResponse] = useState('');
   const [selectedCaseId, setSelectedCaseId] = useState(null);
 
-  // Fetch cases from backend with token
   const fetchCases = async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
@@ -20,9 +20,7 @@ const ManageReports = () => {
         },
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch cases");
-      }
+      if (!response.ok) throw new Error("Failed to fetch cases");
 
       const data = await response.json();
       setCases(data);
@@ -39,7 +37,6 @@ const ManageReports = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Update case status with token
   const updateStatus = async (id) => {
     const token = localStorage.getItem("token");
 
@@ -50,25 +47,19 @@ const ManageReports = () => {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({ status: "resolved" }), // Change the status to 'resolved'
+        body: JSON.stringify({ status: "resolved" }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update case Status");
-      }
+      if (!response.ok) throw new Error("Failed to update case Status");
 
-      // Optimistically update UI
-      setCases((prevcases) =>
-        prevcases.map((c) =>
-          c.id === id ? { ...c, status: "resolved" } : c // Update the status to 'resolved'
-        )
+      setCases((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, status: "resolved" } : c))
       );
     } catch (error) {
       console.log("Error updating case status", error);
     }
   };
 
-  // Handle submitting the admin response
   const handleResponseSubmit = async () => {
     if (!adminResponse) {
       alert("Response is required!");
@@ -89,10 +80,9 @@ const ManageReports = () => {
 
       if (response.ok) {
         alert("Response added successfully!");
-        // Close the modal and reset state
         setResponseModalOpen(false);
         setAdminResponse('');
-        fetchCases(); // Re-fetch cases to update response
+        fetchCases();
       } else {
         const data = await response.json();
         alert(data.error || "Error while sending response");
@@ -104,9 +94,7 @@ const ManageReports = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h2 className="text-2xl font-bold mb-6 text-center text-blue-800 transition-all duration-300 ease-in-out">
-        Manage Reported Cases
-      </h2>
+      <h2 className="text-2xl font-bold mb-6 text-center text-blue-800">Manage Reported Cases</h2>
 
       {loading ? (
         <p className="text-center text-gray-600 opacity-75 animate-pulse">Loading cases...</p>
@@ -131,40 +119,44 @@ const ManageReports = () => {
               {cases.map((caseItem) => (
                 <tr
                   key={caseItem.id}
-                  className="border-b text-center hover:bg-gray-100 hover:scale-105 transition-all duration-300 ease-in-out"
+                  className="border-b text-center hover:bg-gray-100 hover:scale-105 transition-all duration-300"
                 >
                   <td className="p-3">{caseItem.firstname}</td>
                   <td className="p-3">{caseItem.gender}</td>
                   <td className="p-3">{caseItem.age}</td>
-                  <td className="p-3">{new Date(caseItem.date_of_incidence).toLocaleDateString()}</td>
+                  <td className="p-3">
+                    {new Date(caseItem.date_of_incidence).toLocaleDateString()}
+                  </td>
                   <td className="p-3">{caseItem.case_description}</td>
                   <td className="p-3">{caseItem.support_needed}</td>
                   <td
-                    className={`p-3 font-bold transition-all duration-300 ease-in-out ${caseItem.status === "resolved" ? "text-green-600" : "text-red-600"}`}
+                    className={`p-3 font-bold ${
+                      caseItem.status === "resolved" ? "text-green-600" : "text-red-600"
+                    }`}
                   >
                     {caseItem.status}
                   </td>
                   <td className="p-3">
                     {caseItem.status.toLowerCase() === "pending" ? (
-                      <>
-                        <button
-                          className="bg-green-500 cursor-pointer text-white px-4 py-1 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out transform hover:scale-105"
+                      <div className="flex justify-center space-x-3">
+                        <CheckCircle
+                          className="text-green-600 hover:scale-110 transition cursor-pointer"
+                          size={24}
+                          title="Mark as Solved"
                           onClick={() => updateStatus(caseItem.id)}
-                        >
-                          Mark as Solved
-                        </button>
-                        <button
-                          className="bg-blue-500 cursor-pointer text-white px-4 py-1 rounded-lg ml-2 hover:bg-blue-700 transition-all duration-300 ease-in-out"
+                        />
+                        <MessageCircle
+                          className="text-blue-600 hover:scale-110 transition cursor-pointer"
+                          size={24}
+                          title="Add Response"
                           onClick={() => {
                             setSelectedCaseId(caseItem.id);
                             setResponseModalOpen(true);
                           }}
-                        >
-                          Add Response
-                        </button>
-                      </>
+                        />
+                      </div>
                     ) : (
-                      <span className="text-gray-500">✔ Solved</span>
+                      <CheckCircle className="text-gray-500 mx-auto" size={24} title="Solved" />
                     )}
                   </td>
                 </tr>
@@ -177,7 +169,7 @@ const ManageReports = () => {
       {/* Admin Response Modal */}
       {responseModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+          <div className="bg-white p-8 rounded-lg shadow-xl w-96">
             <h3 className="text-xl font-bold mb-4">Add Response</h3>
             <textarea
               value={adminResponse}
@@ -186,18 +178,18 @@ const ManageReports = () => {
               className="w-full p-3 border rounded-md"
               placeholder="Enter your response"
             />
-            <div className="flex justify-between mt-4">
+            <div className="flex justify-end gap-4 mt-4">
               <button
-                className="bg-gray-500 text-white px-4 py-2 rounded-md"
+                className="bg-gray-500 text-white px-4 py-2 rounded-full"
                 onClick={() => setResponseModalOpen(false)}
               >
                 Cancel
               </button>
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                className="bg-blue-500 text-white px-4 py-2 rounded-full"
                 onClick={handleResponseSubmit}
               >
-                Submit Response
+                Submit
               </button>
             </div>
           </div>

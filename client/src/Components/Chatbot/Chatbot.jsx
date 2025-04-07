@@ -46,7 +46,7 @@ const Chatbot = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer YOUR_OPENAI_API_KEY`, // Replace with your API key
+          "Authorization": `Bearer `, // Replace with your API key
         },
         body: JSON.stringify({
           model: "gpt-4",

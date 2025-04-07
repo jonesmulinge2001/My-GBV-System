@@ -18,7 +18,7 @@ import Footer from "./Components/Footer/Footer";
 import AllResources from "./Components/Admin/AllResources";
 import Analytics from "./Components/Admin/Analytics";
 import ContactReply from "./Components/Admin/ContactReply";
-import UserProfile from "./Components/UserProfile/UserProfile";
+// import UserProfile from "./Components/UserProfile/UserProfile";
 import AdminLogin from "./Components/Admin/AdminLogin";
 import AdminRegister from "./Components/Admin/AdminRegister";
 import CaseStatus from "./Components/CaseStatus";
@@ -58,7 +58,7 @@ const AppContent = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/report" element={<ReportCase />} />
           <Route path="/resources" element={<HelpfulResources resources={resources} />} />
-          <Route path="/profile" element={<UserProfile/>}/>
+          {/* <Route path="/profile" element={<UserProfile/>}/> */}
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/case status" element={<CaseStatus/>}/>
