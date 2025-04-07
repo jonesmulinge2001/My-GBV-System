@@ -9,6 +9,16 @@ const createTables = () => {
     )
   `;
 
+  const adminTable = `
+    CREATE TABLE IF NOT EXISTS admin (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(100) NOT NULL,
+      email VARCHAR(100) NOT NULL UNIQUE,
+      password VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `;
+
   const casesTable = `
     CREATE TABLE IF NOT EXISTS cases (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -50,6 +60,14 @@ const createTables = () => {
       console.error("Error creating users table:", err);
     } else {
       console.log("Users table ready");
+    }
+  });
+
+  db.query(adminTable, (err) => {
+    if (err) {
+      console.error("Error creating admin table:", err);
+    } else {
+      console.log("Admin table ready");
     }
   });
 

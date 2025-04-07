@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../config/db");
-require("dotenv").config(); 
+require("dotenv").config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
@@ -18,7 +18,7 @@ const signupUser = async (req, res) => {
 
         const checkEmailSQL = "SELECT * FROM users WHERE email = ?";
         db.query(checkEmailSQL, [email], (err, results) => {
-            if (err) return res.status(500).json({ message: "Oppss! something went wrong try again" });
+            if (err) return res.status(500).json({ message: "Oops! Something went wrong, try again" });
 
             if (results.length > 0) {
                 return res.status(400).json({ message: "Email already in use" });
@@ -38,7 +38,7 @@ const signupUser = async (req, res) => {
     }
 };
 
-// 📌 Login Function (Includes Case ID)
+// 📌 Login Function (Includes Case ID & Status check)
 const loginUser = (req, res) => {
     const { email, password } = req.body;
 
@@ -66,8 +66,8 @@ const loginUser = (req, res) => {
                 return res.status(401).json({ message: "Invalid email or password" });
             }
 
-            // Fetch case ID linked to the user
-            const caseSql = "SELECT id FROM cases WHERE id = ?";
+            // Fetch case ID linked to the user (if any)
+            const caseSql = "SELECT id FROM cases WHERE user_id = ?"; // Assuming you use user_id for relation
             db.query(caseSql, [user.id], (caseErr, caseResults) => {
                 if (caseErr) {
                     console.error("Error fetching case ID:", caseErr); 
@@ -76,9 +76,12 @@ const loginUser = (req, res) => {
 
                 const caseId = caseResults.length > 0 ? caseResults[0].id : null;
 
-                const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "7d" });
+                // Include user status (admin or user)
+                const userStatus = user.status || 'user'; // Default to 'user' if no status is set
 
-                console.log("User logged in:", { id: user.id, email: user.email, caseId }); 
+                const token = jwt.sign({ id: user.id, email: user.email, status: userStatus }, JWT_SECRET, { expiresIn: "7d" });
+
+                console.log("User logged in:", { id: user.id, email: user.email, caseId, status: userStatus });
 
                 return res.status(200).json({
                     message: "Login successful",
@@ -87,6 +90,7 @@ const loginUser = (req, res) => {
                         id: user.id,
                         email: user.email,
                         caseId: caseId,
+                        status: userStatus, // Add the user status here
                     },
                 });
             });
@@ -97,6 +101,5 @@ const loginUser = (req, res) => {
         }
     });
 };
-
 
 module.exports = { signupUser, loginUser };

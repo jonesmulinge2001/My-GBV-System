@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const HelpfulResources = () => {
-  const [dynamicResources, setDynamicResources] = useState([]); // resorces fetched from the database
-  const [loading, setLoading] = useState(true); // showing loading state when fetching resources from the database
-  const [error, setError] = useState(null); // error desplay when no resource is loaded
+  const [dynamicResources, setDynamicResources] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [expandedCards, setExpandedCards] = useState({});
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -14,7 +15,7 @@ const HelpfulResources = () => {
         if (!myResponse.ok) {
           throw new Error("Failed to fetch resources");
         }
-        const data = await myResponse.json(); // parses myresponse body as JSON and returns a promise
+        const data = await myResponse.json();
         setDynamicResources(data);
       } catch (error) {
         setError(error.message);
@@ -24,7 +25,19 @@ const HelpfulResources = () => {
     };
 
     fetchResources();
-  }, []); // empty dependency
+  }, []);
+
+  const toggleReadMore = (index) => {
+    setExpandedCards((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
+  };
+
+  const getPreviewText = (text, isExpanded) => {
+    const words = text.split(" ");
+    return isExpanded ? text : words.slice(0, 5).join(" ") + (words.length > 5 ? "..." : "");
+  };
 
   return (
     <div className="min-h-screen -mt-10 bg-gradient-to-b from-blue-50 to-gray-100 p-6">
@@ -59,7 +72,17 @@ const HelpfulResources = () => {
                 />
               )}
               <h2 className="text-xl font-semibold text-gray-700 mb-2">{resource.title}</h2>
-              <p className="text-gray-600 text-sm mb-3">{resource.description}</p>
+              <p className="text-gray-600 text-sm mb-2">
+                {getPreviewText(resource.description, expandedCards[index])}
+              </p>
+              {resource.description.split(" ").length > 5 && (
+                <button
+                  onClick={() => toggleReadMore(index)}
+                  className="text-blue-600 text-xs font-medium mb-2 hover:underline"
+                >
+                  {expandedCards[index] ? "Read less" : "Read more"}
+                </button>
+              )}
               <Link
                 to={resource.link}
                 target="_blank"

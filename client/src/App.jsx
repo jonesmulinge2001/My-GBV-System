@@ -19,6 +19,9 @@ import AllResources from "./Components/Admin/AllResources";
 import Analytics from "./Components/Admin/Analytics";
 import ContactReply from "./Components/Admin/ContactReply";
 import UserProfile from "./Components/UserProfile/UserProfile";
+import AdminLogin from "./Components/Admin/AdminLogin";
+import AdminRegister from "./Components/Admin/AdminRegister";
+import CaseStatus from "./Components/CaseStatus";
 
 const AppContent = () => {
   const location = useLocation();
@@ -58,9 +61,12 @@ const AppContent = () => {
           <Route path="/profile" element={<UserProfile/>}/>
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+          <Route path="/case status" element={<CaseStatus/>}/>
 
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />}>
+            <Route path="register" element={<AdminRegister/>}/>
+            <Route path="login" element={<AdminLogin/>}/>
             <Route path="manage-reports" element={<ManageReports />} />
             <Route path="add-resources" element={<AddResources onAddResource={handleAddResource} />} />
             <Route path="all-resources" element={<AllResources/>}/>

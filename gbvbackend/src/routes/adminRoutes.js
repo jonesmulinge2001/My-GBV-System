@@ -66,4 +66,28 @@ router.delete("/cases/:id", authenticateToken, (req, res) => {
   });
 });
 
+// 5️⃣ Admin can add a response to a case (Admin Only)
+router.put("/cases/:id/respond", authenticateToken, (req, res) => {
+  const caseId = req.params.id;
+  const { adminResponse } = req.body; // Admin's response to the case
+
+  if (!adminResponse) {
+    return res.status(400).json({ error: "Admin response is required" });
+  }
+
+  db.query(
+    "UPDATE cases SET admin_response = ?, response_timestamp = NOW() WHERE id = ?",
+    [adminResponse, caseId],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: "Database error" });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: "Case not found" });
+      }
+      res.json({ message: "Admin response added successfully" });
+    }
+  );
+});
+
 module.exports = router;
