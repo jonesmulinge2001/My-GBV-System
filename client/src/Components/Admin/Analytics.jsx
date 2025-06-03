@@ -29,8 +29,8 @@ const Analytics = () => {
     const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28DFF", "#FF5678"];
 
     return (
-        <div ref={containerRef} className="p-6 min-h-screen bg-gray-50">
-            <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">📊 Case Reporting Analytics</h2>
+        <div ref={containerRef} className="p-6 min-h-screen bg-black-600">
+            <h2 className="text-3xl font-bold text-center text-black mb-6">📊 Case Reporting Analytics</h2>
 
             {/* Responsive Chart Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

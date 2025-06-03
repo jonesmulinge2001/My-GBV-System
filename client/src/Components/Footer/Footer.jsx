@@ -9,7 +9,7 @@ const Footer = () => {
   if (location.pathname === "/login" || location.pathname === "/signup") return null;
 
   return (
-    <footer className="bg-blue-900 text-white pt-4 px-6  mt-0">
+    <footer className="bg-purple-600 text-white pt-4 px-6  mt-0">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         
         {/* Section 1: About */}
